@@ -18,7 +18,7 @@ Recent versions of OS X (>= 11.9) have all dependencies pre-installed.
 
 Respectable linux distributions provide `bash` and `su` pre-installed, and in debian-based systems you can install expect via `sudo apt-get install expect`.
 
-### Use in `tmux`
+### Usage in tmux
 
 Assuming `bashlock` is in your `$PATH`, placing the following in your
 `~/.tmux.conf` file will bind the shortcut `Meta-X` to lock tmux.
