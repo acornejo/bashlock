@@ -1,0 +1,59 @@
+#!/bin/bash
+
+RETRIES=0
+
+onexit() {
+    return
+}
+
+checkpassword() {
+    expect << EOF >/dev/null
+spawn su $1 -c "exit"
+expect "Password:"
+send "$2\r"
+expect eof
+catch wait result
+exit [lindex \$result 3]
+EOF
+}
+
+header() {
+    clear
+    echo ""
+    echo ""
+    echo ""
+    echo ""
+    echo "Locked by $USER"
+}
+
+authenticate() {
+    header
+    local PASSWORD=""
+    local RETRY=0
+    while true; do
+        read -s -p "Password: " PASSWORD
+        echo
+        checkpassword $USER $PASSWORD
+        if [ "$?" -eq 0 ]; then
+            if [ "$RETRIES" -ne 0 ]; then
+                echo "unlocked! ($RETRIES failed attempts)"
+                sleep 2
+            else
+                echo "unlocked!"
+            fi
+            exit 0
+        else
+            RETRIES=$((RETRIES+1))
+            RETRY=$((RETRY+1))
+            echo "authentication failed! ($RETRIES failed attempts)"
+            if [ "$RETRY" -ge 5 ]; then
+                RETRY=0
+                sleep 5
+                header
+            fi
+        fi
+    done
+}
+
+trap onexit 1 2 3 15 20 ERR
+authenticate
