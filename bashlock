@@ -41,12 +41,14 @@ authenticate() {
         echo
         checkpassword $USER $PASSWORD
         if [ "$?" -eq 0 ]; then
-            echo "unlocked!"
+            echo "Welcome back!"
+            echo ""
             exit 0
         else
             RETRIES=$((RETRIES+1))
             RETRY=$((RETRY+1))
             echo "authentication failed!"
+            echo ""
             if [ "$RETRY" -ge "$MAXRETRIES" ]; then
                 RETRY=0
                 echo "sleeping for $RETRYSLEEP"
