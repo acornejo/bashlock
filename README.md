@@ -14,6 +14,19 @@ The main purpose of `bashlock` is to be used as a `lock-server` inside `tmux`. T
 - expect
 - su
 
-Recent versions of OS X (>= 10.9) come with all the above utilities installed by default. 
+Recent versions of OS X (>= 11.9) have all dependencies pre-installed.
 
-All respectable linux distributions provide `bash` and `su` preinstalled, and in debian-based systems you can install expect via `sudo apt-get install expect`.
+Respectable linux distributions provide `bash` and `su` pre-installed, and in debian-based systems you can install expect via `sudo apt-get install expect`.
+
+### Use in `tmux`
+
+Assuming `bashlock` is in your `$PATH`, placing the following in your
+`~/.tmux.conf` file will bind the shortcut `Meta-X` to lock tmux.
+
+```
+# Screen lock
+bind-key -n M-x lock-server
+set-option -g   lock-after-time 0
+set-option -g   lock-server on
+set-option -g   lock-command "bashlock"
+```
