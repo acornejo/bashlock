@@ -1,6 +1,8 @@
 #!/bin/bash
 
 RETRIES=0
+MAXRETRIES=5
+RETRYSLEEP=4
 
 onexit() {
     return
@@ -23,7 +25,11 @@ header() {
     echo ""
     echo ""
     echo ""
-    echo "Locked by $USER"
+    if [ "$RETRIES" -ne 0 ]; then
+        echo "Locked by $USER ($RETRIES failed login attempts)"
+    else
+        echo "Locked by $USER"
+    fi
 }
 
 authenticate() {
@@ -35,25 +41,21 @@ authenticate() {
         echo
         checkpassword $USER $PASSWORD
         if [ "$?" -eq 0 ]; then
-            if [ "$RETRIES" -ne 0 ]; then
-                echo "unlocked! ($RETRIES failed attempts)"
-                sleep 2
-            else
-                echo "unlocked!"
-            fi
+            echo "unlocked!"
             exit 0
         else
             RETRIES=$((RETRIES+1))
             RETRY=$((RETRY+1))
-            echo "authentication failed! ($RETRIES failed attempts)"
-            if [ "$RETRY" -ge 5 ]; then
+            echo "authentication failed!"
+            if [ "$RETRY" -ge "$MAXRETRIES" ]; then
                 RETRY=0
-                sleep 5
+                echo "sleeping for $RETRYSLEEP"
+                sleep $RETRYSLEEP
                 header
             fi
         fi
     done
 }
 
-trap onexit 1 2 3 15 20 ERR
+trap onexit 1 2 3 15 18 20 ERR
 authenticate
