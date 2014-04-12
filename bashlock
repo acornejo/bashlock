@@ -9,10 +9,11 @@ onexit() {
 }
 
 checkpassword() {
+    local PASS=${2//$/\\$}
     expect << EOF >/dev/null
 spawn su $1 -c "exit"
 expect "Password:"
-send "$2\r"
+send "$PASS\r"
 expect eof
 catch wait result
 exit [lindex \$result 3]
