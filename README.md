@@ -18,6 +18,10 @@ Recent versions of OS X (>= 11.9) have all dependencies pre-installed.
 
 Respectable linux distributions provide `bash` and `su` pre-installed, and in debian-based systems you can install expect via `sudo apt-get install expect`.
 
+To install simply copy somewhere in your path, the recommended location
+is `/usr/bin`.
+
+
 ### Usage in tmux
 
 Assuming `bashlock` is in your `$PATH`, placing the following in your
