@@ -13,7 +13,7 @@ checkpassword() {
     expect << EOF >/dev/null
 spawn su $1 -c "exit"
 expect "Password:"
-send "$PASS\r"
+send "${PASS}\r"
 expect eof
 catch wait result
 exit [lindex \$result 3]
@@ -26,10 +26,10 @@ header() {
     echo ""
     echo ""
     echo ""
-    if [ "$RETRIES" -ne 0 ]; then
-        echo "Locked by $USER ($RETRIES failed login attempts)"
+    if [ "${RETRIES}" -ne 0 ]; then
+        echo "Locked by ${USER} (${RETRIES} failed login attempts)"
     else
-        echo "Locked by $USER"
+        echo "Locked by ${USER}"
     fi
 }
 
@@ -40,7 +40,7 @@ authenticate() {
     while true; do
         read -s -p "Password: " PASSWORD
         echo
-        checkpassword $USER $PASSWORD
+        checkpassword ${USER} "${PASSWORD}"
         if [ "$?" -eq 0 ]; then
             echo "Welcome back!"
             echo ""
@@ -50,10 +50,10 @@ authenticate() {
             RETRY=$((RETRY+1))
             echo "authentication failed!"
             echo ""
-            if [ "$RETRY" -ge "$MAXRETRIES" ]; then
+            if [ "${RETRY}" -ge "${MAXRETRIES}" ]; then
                 RETRY=0
-                echo "sleeping for $RETRYSLEEP"
-                sleep $RETRYSLEEP
+                echo "sleeping for ${RETRYSLEEP}"
+                sleep ${RETRYSLEEP}
                 header
             fi
         fi
